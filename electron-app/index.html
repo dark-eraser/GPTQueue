@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
+    <link rel="stylesheet" href="assets/styles.css">
 <head>
-    <title>OpenAI with Electron</title>
+    <title>GPTQueue</title>
 </head>
 <body>
-    <h1>OpenAI GPT Interaction</h1>
+    <h1>GPTQueue</h1>
     <input type="text" id="prompt-input" placeholder="Enter your prompt">
+    <label for="modelSelector">Choose a Model:</label>
+    <select id="modelSelector">
+        <option value="gpt-3.5-turbo">GPT-3.5-Turbo</option>
+        <option value="gpt-4-turbo-preview">GPT-4-Turbo-Preview</option>
+      </select>
     <button id="send-prompt">Send Prompt</button>
     <div id="response"></div>
-
+    
+ 
+    
     <script src="renderer.js"></script>
 </body>
 </html>
