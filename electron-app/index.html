@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>GPTQueue</title>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container py-4">
         <h1 class="mb-4 text-center">GPTQueue</h1>
@@ -22,13 +24,19 @@
                 <button id="send-prompt" class="btn btn-primary">Send Prompt</button>
             </div>
         </div>
-        <ul id="conversationsList" class="list-group mb-3">
-            <!-- Conversations will be appended here -->
-        </ul>
-        <div id="conversationDetails" class="border p-3">
-            <!-- Conversation details will be shown here -->
+
+        <ul id="conversationsList" class="list-group mb-3"></ul>
+        <!-- Placeholder for conversation details; specific details will be dynamically inserted -->
+        <div id="conversationDetailsContainer">
+            <!-- <button id ="continue-conversation" class="btn btn-primary">Continue Conversation</button> -->
         </div>
+
+
+
     </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
     <script src="renderer.js"></script>
 </body>
+
 </html>
