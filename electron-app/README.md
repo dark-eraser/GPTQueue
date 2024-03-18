@@ -1,8 +1,5 @@
 
-<img src="assets/images/logo.webp" width="200">
-
-
-# GPTQueue
+<img src="assets/images/banner.png">
 
 
 
@@ -38,3 +35,4 @@ To deploy this project run:
 
   [@dark-eraser](https://www.github.com/dark-eraser)
 
+<img src="assets/images/logo.webp" width="200">
