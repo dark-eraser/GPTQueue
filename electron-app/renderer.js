@@ -5,6 +5,16 @@ const path = require("path");
 const DOMPurify = require("dompurify")(window);
 const { marked } = require("marked");
 
+
+document.getElementById('go-back').addEventListener('click', () => {
+    ipcRenderer.send('navigate-back');
+});
+
+document.getElementById('go-forward').addEventListener('click', () => {
+    ipcRenderer.send('navigate-forward');
+});
+
+
 // Configure marked with highlight.js for code syntax highlighting
 marked.setOptions({
   highlight: function (code, lang) {
@@ -142,8 +152,15 @@ function renderConversations() {
     listContainer.appendChild(listItem);
   });
 }
+document.getElementById("test-continue").addEventListener("click", testContinue);
+
+function testContinue() {
+    ipcRenderer.send("navigate-to-test", "test.html");
+}
+
 
 function showConversationDetails(index) {
+
   const existingContainer = document.getElementById(
     `conversationContainer-${index}`
   );
@@ -165,7 +182,19 @@ function showConversationDetails(index) {
     continueBtn.id = `continueBtn-${index}`; // Assign an id if needed
     // Attach an event listener directly to the button
     continueBtn.addEventListener("click", () => {
+      const conversationState = {
+        conversationId: index,
+        messages: conversations[index].messages,
+      };
+      const stateString = JSON.stringify(conversationState);
+
       ipcRenderer.send("navigate-to-new-conversation", "new_conversation.html");
+      ipcRenderer.on("request-conversationState", (event) => {
+        event.reply(
+          "response-conversationState",
+          global.sharedState.conversationState
+        );
+      });
     });
     container.appendChild(continueBtn);
   } else {
@@ -178,7 +207,6 @@ function showConversationDetails(index) {
   );
   messagesContainer.innerHTML = ""; // Clear previous messages
 
-  // Assuming you have a 'conversations' array with messages
   const conversation = conversations[index];
   if (conversation) {
     conversation.messages.forEach((msg) => {
@@ -188,8 +216,8 @@ function showConversationDetails(index) {
       msgElement.appendChild(roleStrong);
       // Sanitize and set marked content as HTML directly
       msgElement.innerHTML += DOMPurify.sanitize(marked(msg.content));
-      hljs.highlightAll();
       messagesContainer.appendChild(msgElement);
     });
+    hljs.highlightAll();
   }
 }

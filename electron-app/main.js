@@ -1,32 +1,47 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+
 try {
-  require('electron-reloader')(module)
+  require("electron-reloader")(module);
 } catch (_) {}
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    backgroundColor: "#f0f0f0",
     width: 1600,
     height: 1200,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       devTools: true,
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
   });
 
-  // Load the index.html of the app.
-  mainWindow.loadFile('index.html');
-  ipcMain.on('navigate-to-new-conversation', (event, page) => {
-    console.log('navigate-to-new-conversation', page);
+  mainWindow.loadFile("index.html");
+  ipcMain.on("navigate-to-new-conversation", (event, page) => {
+    console.log("navigate-to-new-conversation", page);
     mainWindow.loadFile(page);
-});
-
-mainWindow.on('closed', function () {
+  });
+  ipcMain.on("navigate-to-test", (event, page) => {
+    console.log("navigate-to-test", page);
+    mainWindow.loadFile(page);
+  });
+  ipcMain.on('navigate-back', (event) => {
+    if (mainWindow.webContents.canGoBack()) {
+        mainWindow.webContents.goBack();
+    }
+  });
+  
+  ipcMain.on('navigate-forward', (event) => {
+    if (mainWindow.webContents.canGoForward()) {
+        mainWindow.webContents.goForward();
+    }
+  });
+  
+  mainWindow.on("closed", function () {
     mainWindow = null;
-});
+  });
 }
-
 
 // ipcMain.on('show-input-dialog', async (event, arg) => {
 //   const result = await dialog.showMessageBox({
@@ -42,13 +57,13 @@ mainWindow.on('closed', function () {
 // });
 app.whenReady().then(createWindow);
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }

@@ -8,9 +8,15 @@
 </head>
 
 <body>
+    <div class="navigation">
+        <button id="go-back">&#8592;</button> <!-- Left arrow -->
+        <button id="go-forward">&#8594;</button> <!-- Right arrow -->
+    </div>
+
     <div class="container py-4">
         <h1 class="mb-4 text-center">GPTQueue</h1>
-        <div class="row g-3 align-items-center mb-3">
+        <div class="row g-3 align-items-center mb-3 chat-box">
+            <button id="test-continue" class="btn btn-primary">Continue Conversation</button>
             <div class="col-auto">
                 <input type="text" id="prompt-input" class="form-control" placeholder="Enter your prompt">
             </div>
