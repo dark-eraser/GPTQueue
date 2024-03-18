@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GPTQueue</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="navigation">
+        <button id="go-back">&#8592;</button> <!-- Left arrow -->
+        <button id="go-forward">&#8594;</button> <!-- Right arrow -->
+    </div>
+
+    <div class="container py-4">
+        <h1 class="mb-4 text-center">GPTQueue</h1>
+        <div class="row g-3 align-items-center mb-3 chat-box">
+            <button id="test-continue" class="btn btn-primary">Continue Conversation</button>
+            <div class="col-auto">
+                <input type="text" id="prompt-input" class="form-control" placeholder="Enter your prompt">
+            </div>
+            <div class="col-auto">
+                <select id="modelSelector" class="form-select">
+                    <option value="gpt-3.5-turbo">GPT-3.5-Turbo</option>
+                    <option value="gpt-4-turbo-preview">GPT-4-Turbo-Preview</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button id="send-prompt" class="btn btn-primary">Send Prompt</button>
+            </div>
+        </div>
+
+        <ul id="conversationsList" class="list-group mb-3"></ul>
+        <!-- Placeholder for conversation details; specific details will be dynamically inserted -->
+        <div id="conversationDetailsContainer">
+            <!-- <button id ="continue-conversation" class="btn btn-primary">Continue Conversation</button> -->
+        </div>
+
+
+
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script src="renderer.js"></script>
+</body>
+
+</html>
