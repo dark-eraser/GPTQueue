@@ -18,12 +18,23 @@ function createWindow() {
   });
 
   mainWindow.loadFile("index.html");
+  // Assuming you have this in your main process
+global.sharedState = {
+  conversationState: null
+};
+
+ipcMain.on('save-conversation-state', (event, state) => {
+  global.sharedState.conversationState = state;
+});
+
+ipcMain.on('request-conversation-state', (event) => {
+  event.reply('response-conversation-state', global.sharedState.conversationState);
+  console.log('Sent conversation state:', global.sharedState.conversationState);
+});
+
   ipcMain.on("navigate-to-new-conversation", (event, page) => {
-    console.log("navigate-to-new-conversation", page);
-    mainWindow.loadFile(page);
-  });
-  ipcMain.on("navigate-to-test", (event, page) => {
     console.log("navigate-to-test", page);
+
     mainWindow.loadFile(page);
   });
   ipcMain.on('navigate-back', (event) => {

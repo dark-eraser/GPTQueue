@@ -5,15 +5,13 @@ const path = require("path");
 const DOMPurify = require("dompurify")(window);
 const { marked } = require("marked");
 
-
-document.getElementById('go-back').addEventListener('click', () => {
-    ipcRenderer.send('navigate-back');
+document.getElementById("go-back").addEventListener("click", () => {
+  ipcRenderer.send("navigate-back");
 });
 
-document.getElementById('go-forward').addEventListener('click', () => {
-    ipcRenderer.send('navigate-forward');
+document.getElementById("go-forward").addEventListener("click", () => {
+  ipcRenderer.send("navigate-forward");
 });
-
 
 // Configure marked with highlight.js for code syntax highlighting
 marked.setOptions({
@@ -96,10 +94,18 @@ async function sendPromptToOpenAI(prompt, conversationId = null) {
     },
   ];
 
-  // If continuing a conversation, append the new prompt to its messages
-  if (conversationId !== null) {
-    const conversation = conversations[conversationId];
-    messages = [...conversation.messages, ...messages];
+  // Check if we're continuing a conversation
+  if (
+    conversationId !== null &&
+    Number.isInteger(conversationId) &&
+    conversationId >= 0 &&
+    conversationId < conversations.length
+  ) {
+    messages = [...conversations[conversationId].messages, ...messages];
+  } else if (conversationId !== null) {
+    // If conversationId is not null but is invalid, log an error
+    console.error("Invalid conversationId:", conversationId);
+    return;
   }
 
   try {
@@ -126,7 +132,10 @@ async function sendPromptToOpenAI(prompt, conversationId = null) {
     // Update or create a conversation
     if (conversationId !== null) {
       conversations[conversationId].messages.push(newMessage, newResponse);
+      // You don't need to call saveConversation here because the state should be updated above
     } else {
+      // For new conversations, update the conversationId to the index of the new conversation
+      conversationId = conversations.length;
       conversations.push({
         messages: [newMessage, newResponse],
       });
@@ -152,15 +161,43 @@ function renderConversations() {
     listContainer.appendChild(listItem);
   });
 }
-document.getElementById("test-continue").addEventListener("click", testContinue);
+// document
+//   .getElementById("test-continue")
+//   .addEventListener("click", testContinue);
 
-function testContinue() {
-    ipcRenderer.send("navigate-to-test", "test.html");
+// function testContinue() {
+//   ipcRenderer.send("navigate-to-test", "test.html");
+// }
+
+// This function would be called before navigating to a new page
+function saveConversation(conversationId) {
+  // Log for debugging
+  console.log("Attempting to save conversation with ID:", conversationId);
+
+  // Ensure conversationId is valid
+  if (
+    typeof conversationId === "number" &&
+    conversationId >= 0 &&
+    conversationId < conversations.length
+  ) {
+    const conversation = conversations[conversationId];
+
+    if (conversation && conversation.messages) {
+      const state = {
+        conversationId: conversationId,
+        messages: conversation.messages,
+      };
+      ipcRenderer.send("save-conversation-state", state);
+      console.log("Conversation saved:", state);
+    } else {
+      console.error("Conversation object is not valid:", conversation);
+    }
+  } else {
+    console.error("Invalid conversationId or out of bounds:", conversationId);
+  }
 }
 
-
 function showConversationDetails(index) {
-
   const existingContainer = document.getElementById(
     `conversationContainer-${index}`
   );
@@ -187,14 +224,15 @@ function showConversationDetails(index) {
         messages: conversations[index].messages,
       };
       const stateString = JSON.stringify(conversationState);
+      saveConversation(index);
+      console.log("Sending conversation state:", stateString);
+      ipcRenderer.on("request-conversation-state", (event) => {
+        global.sharedState.conversationState = stateString;
+        event.reply("response-conversation-state", stateString);
 
-      ipcRenderer.send("navigate-to-new-conversation", "new_conversation.html");
-      ipcRenderer.on("request-conversationState", (event) => {
-        event.reply(
-          "response-conversationState",
-          global.sharedState.conversationState
-        );
       });
+      ipcRenderer.send("navigate-to-new-conversation", "test.html");
+
     });
     container.appendChild(continueBtn);
   } else {

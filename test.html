@@ -2,13 +2,23 @@
 <html>
 <head>
     <title>Test</title>
-    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/styles_new_conversation.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <div class="navigation">
         <button id="go-back">&#8592;</button> <!-- Left arrow -->
         <button id="go-forward">&#8594;</button> <!-- Right arrow -->
     </div>
+    <ul id="conversationsList" class="list-group mb-3"></ul>
+    <div id="conversationDetailsContainer">
+        <!-- <button id ="continue-conversation" class="btn btn-primary">Continue Conversation</button> -->
+    </div>
+
+    <!-- This is where the conversation will be rendered -->
+      </div>
+      <input type="text" id="prompt-input" placeholder="Enter your prompt">
+      <button id="send-prompt">Send</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script src="test.js"></script>
 </head>
 
 <body>
